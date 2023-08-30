@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} List of students {% endblock %}
+
+{% block content %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong></strong> {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+
+                {% endif %}
+
+                {% if all_students %}
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Nr.</th>
+                            <th>Profile</th>
+                            <th>First name</th>
+                            <th>Last name</th>
+                            <th>Email</th>
+                            <th>Start date</th>
+                            <th>End date</th>
+                            <th>Active</th>
+                            <th>Gender</th>
+                            <th>Created at</th>
+                            <th>Name of trainer</th>
+                            <th>Course</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for student in all_students %}
+
+                            <tr>
+
+                                <td>{{ forloop.counter }}</td>
+                                {# counter0 -> daca vreti sa incepeti de la zero. #}
+                                <td>
+                                    {% if student.profile %}
+                                        <img src="{{ student.profile.url }}" style="width: 60px; height: 60px"
+                                             alt="nu exista imagine">
+                                    {% elif  student.gender == 'male' %}
+                                        <img src="{% static 'images/img.png' %}" style="width: 60px; height: 60px"
+                                             alt="nu exista imagine">
+                                    {% elif student.gender == 'female' %}
+                                        <img src="{% static 'images/img_1.png' %}" style="width: 60px; height: 60px"
+                                             alt="nu exista imagine">
+                                    {% endif %}
+
+
+                                </td>
+
+                                <td>{{ student.first_name }}</td>
+
+                                <td>{{ student.last_name }}</td>
+                                <td>{{ student.email }}</td>
+                                <td>{{ student.start_date|date:'d/M/y' }}</td>
+                                {# cu majuscule, scrie literele lunii/zilei #}
+                                <td>{{ student.end_date|date:'d/M/y' }}</td>
+                                <td>
+                                    {% if student.active %}
+                                        Yes
+                                    {% else %}
+                                        No
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {{ student.gender|title }} {#lower/upper #}
+                                </td>
+                                <td>
+                                    {{ student.create_at|date:'d/M/y h:i:s' }}
+                                </td>
+                                <td> {% if student.trainer %}
+                                    {{ student.trainer }}
+                                {% else %}
+                                    No trainer
+                                {% endif %}
+                                </td>
+                                <td>
+                                    {% if student.trainer.course %}
+                                        {{ student.trainer.course }}
+                                    {% else %}
+                                        No course
+                                    {% endif %}
+                                </td>
+
+                                {% if perms.student.change_student or perms.student_delete_student or perms.student.view_student %}
+                                    <td>
+
+                                        <div class="dropdown">
+                                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                More actions
+                                            </button>
+
+                                            <ul class="dropdown-menu">
+                                                {% if perms.student.change_student %}
+                                                    <li><a class="dropdown-item"
+                                                           href="{% url 'update_student' student.id %}">Update</a>
+                                                    </li>
+                                                {% endif %}
+                                                {% if perms.student.delete_student %}
+                                                    <li><a class="dropdown-item"
+                                                           href="{% url 'delete_student' student.id %}">Delete</a></li>
+                                                {% endif %}
+                                                {% if perms.student.view_student %}
+                                                    <li><a class="dropdown-item"
+                                                           href="{% url 'detail_student' student.id %}">View Details</a>
+                                                    </li>
+                                                {% endif %}
+                                            </ul>
+                                        </div>
+                                    </td>
+                                {% else %}
+                                    <td>No actions</td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <h1 class="text-center">NO STUDENTS!</h1>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

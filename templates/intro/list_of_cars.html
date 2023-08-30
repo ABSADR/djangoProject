@@ -1,0 +1,34 @@
+{% extends 'base.html' %} {# extindem pagina html base.html #}
+
+{% block title %} List of cars {% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-md-8 offset-md-2">
+            <table class="table table-primary table-hover">
+                <thead>
+                <tr>
+                    <th>Brand</th>
+                    <th>Model</th>
+                    <th>Year</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for car in all_cars %}
+                    <tr>
+                        <td>{{ car.brand }}</td>
+                        <td>{{ car.model }}</td>
+                        <td>{{ car.year }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <a class="btn btn-warning" href="{%  url 'list-of-movies' %}">Go to movies</a>
+        </div>
+            </div>
+
+    </div>
+
+{% endblock %}

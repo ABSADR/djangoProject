@@ -1,0 +1,43 @@
+{% extends 'base.html' %} {# extindem pagina html base.html #}
+
+{% block title %} List of movies {% endblock %}
+
+{% block content %}
+    <div class="col-md-8 offset-md-2 ">
+
+
+
+
+<div class="text-bg-warning p-3 col-md-8 offset-md-2 border border-danger">List of movies</div>
+<table class="table table-info table-hover">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Year</th>
+        </tr>
+
+
+        </thead>
+        <tbody>
+        {% for movie in all_movies %}
+            <tr>
+                <td><strong>{{ movie.name }}</strong></td>
+                <td><mark>{{ movie.category }}</mark></td>
+                <td>{{ movie.year }}</td>
+
+            </tr>
+
+        {% endfor %}
+
+
+
+
+        </tbody>
+
+
+    </table>
+    <a class="btn btn-info" href="{% url 'list-of-cars' %}">Go to list of cars</a>
+
+    </div>
+{% endblock %}
